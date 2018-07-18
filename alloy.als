@@ -1,19 +1,18 @@
 sig Xbox {
-	biblioteca: one Biblioteca,
-	social: one Social,
-	loja: one Loja,
-	-- tem apenas um usuário?
+	paginas: set Pagina
 	usuario: one Usuario
 }
 
 sig Usuario {}
 
-sig Biblioteca {
+sig Pagina{}
+
+sig Biblioteca extends Pagina {
 	jogos: set Jogo,
 	aplicativos: set Aplicativo
 }
 
-sig Loja {
+sig Loja extends Pagina {
 	jogos: set Jogo,
 	aplicativos: set Aplicativo
 }
@@ -21,7 +20,7 @@ sig Loja {
 sig Jogo {}
 sig Aplicativo {}
 
-sig Social {
+sig Social extends Pagina {
 	publicacoes: set Publicacao
 }
 
