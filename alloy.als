@@ -1,5 +1,5 @@
 sig Xbox {
-	paginas: set Pagina
+	paginas: set Pagina,
 	usuario: one Usuario
 }
 
