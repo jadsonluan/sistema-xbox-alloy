@@ -45,11 +45,14 @@ pred temXbox[u:Usuario] {
 	one u.~usuario
 }
 
-pred foiPublicado[p:Publicacao] {}
+pred foiPublicado[p:Publicacao] {
+	one p.~publicacoes
+}
 
 -- fatos
 fact {
 	all u:Usuario | temXbox[u]
+	all p:Publicacao | foiPublicado[p]
 }
 
 fact {
