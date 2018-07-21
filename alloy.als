@@ -36,7 +36,6 @@ sig Video extends Publicacao {}
 sig Stream extends Publicacao{}
 
 -- Predicados
-
 pred temBiblioteca[x:Xbox]{}
 pred temLoja[x:Xbox] {}
 pred temSocial[x:Xbox] {}
@@ -53,20 +52,9 @@ pred foiPublicado[p:Publicacao] {
 fact {
 	all u:Usuario | temXbox[u]
 	all p:Publicacao | foiPublicado[p]
-}
-
-fact {
 	all b:Biblioteca | #armazenamentoJogos[b] <= 5
-}
-
-fact {
 	all b:Biblioteca | #armazenamentoApps[b] <= 8
-}
-
-fact {
 	all l:Loja | #promoJogos[l] + #promoApps[l] >= 10 and #promoJogos[l] + #promoApps[l] <= 20
-}
-fact {
 	all x:Xbox | temLoja[x] and temSocial[x]
 	all p:Publicacao | foiPublicado[p]
 }
@@ -87,7 +75,6 @@ fun promoJogos[l:Loja]: set Jogo {
 fun promoApps[l:Loja]: set Aplicativo {
 	l.aplicativos
 }
-
 
 pred show[]{}
 run show
