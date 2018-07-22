@@ -1,4 +1,8 @@
 module xbox
+
+-------------------------------------------------------
+-------------------- A S S I N A T U R A S  |
+-------------------------------------------------------
 sig Xbox {
 	usuario: one Usuario
 }
@@ -35,39 +39,79 @@ sig Screenshot extends Publicacao {}
 sig Video extends Publicacao {}
 sig Stream extends Publicacao{}
 
--- Predicados
+-- Estados da publicação
+sig Curtida, Compartilhamento {
+	autoria: one Usuario,
+	publicacao: one Publicacao
+}
+
+sig Comentario {
+	autoria: one Usuario,
+	transmissao: one Stream
+}
+
+----------------------------------------------------
+-------------------- P R E D I C A D O S |
+----------------------------------------------------
 pred temBiblioteca[u:Usuario]{ one u.biblioteca }
 pred temLoja[u:Usuario] { one u.loja }
 pred temSocial[u:Usuario] { one u.social }
 pred temXbox[u:Usuario] { one u.~usuario }
+
 pred temUsuario[b:Biblioteca] { one b.~biblioteca }
+
 pred foiPublicado[p:Publicacao] {	one p.~publicacoes }
 
--- fatos
+pred temUsuario[c:Curtida] { one c.autoria}
+pred temPublicacao[c:Curtida] { one c.publicacao }
+
+pred temUsuario[c:Compartilhamento] { one c.autoria }
+pred temPublicacao[c:Compartilhamento] { one c.publicacao}
+
+pred temUsuario[c:Comentario] { one c.autoria }
+pred temStream[c:Comentario] { one c.transmissao }
+
+-------------------------------------
+-------------------- F A T O S |
+-------------------------------------
 fact {
 	all u:Usuario | temXbox[u]
-	all p:Publicacao | foiPublicado[p]
-	all l:Loja | #promoJogos[l] + #promoApps[l] >= 10 and #promoJogos[l] + #promoApps[l] <= 20
 	all u:Usuario | temLoja[u] and temSocial[u] and temBiblioteca[u]
+	
+	all p:Publicacao | foiPublicado[p]	
+	
+	all c:Curtida | temUsuario[c] and temPublicacao[c]
+	all c:Compartilhamento | temUsuario[c] and temPublicacao[c]
+	all c:Comentario | temUsuario[c] and temStream[c]
+
+	all b:Biblioteca | #armazenamentoJogos[b] < 6
+	all b:Biblioteca | #armazenamentoApps[b] < 9
 	all b:Biblioteca | temUsuario[b]
+	
+	all l:Loja | #(promoJogos[l] + promoApps[l])  > 9 and #(promoJogos[l] + promoApps[l]) < 21
 }
 
---funções
-fun armazenamentoJogos[b:Biblioteca]: set Jogo {
-	b.jogos
-}
+--------------------------------------------
+-------------------- F U N Ç Õ E S |
+--------------------------------------------
+fun armazenamentoJogos[b:Biblioteca]: set Jogo { b.jogos }
+fun armazenamentoApps[b:Biblioteca]: set Aplicativo { b.aplicativos }
+fun promoJogos[l:Loja]: set Jogo {	l.jogos }
+fun promoApps[l:Loja]: set Aplicativo {	l.aplicativos }
 
-fun armazenamentoApps[b:Biblioteca]: set Aplicativo {
-	b.aplicativos
-}
 
-fun promoJogos[l:Loja]: set Jogo {
-	l.jogos
-}
+----------------------------------------
+-------------------- T E S T E S |
+----------------------------------------
+assert testMinimoDaLoja { all l:Loja | #(promoJogos[l] + promoApps[l])  > 9 }
+assert testMaximoDaLoja { all l:Loja | #(promoJogos[l] + promoApps[l])  < 21 }
+assert testArmazenamentoJogos {	all b:Biblioteca | #armazenamentoJogos[b] < 6 }
+assert testArmazenamentoApps { all b:Biblioteca | #armazenamentoApps[b] < 9 }
 
-fun promoApps[l:Loja]: set Aplicativo {
-	l.aplicativos
-}
+check testMinimoDaLoja for 10
+check testMaximoDaLoja for 20
+check testArmazenamentoJogos for 20
+check testArmazenamentoApps for 20
 
 pred show[]{}
-run show
+run show for 10
