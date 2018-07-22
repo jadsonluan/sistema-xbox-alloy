@@ -4,17 +4,17 @@ sig Xbox {
 }
 
 sig Usuario {
-	paginas: some Pagina
+	social: one Social,
+	biblioteca: one Biblioteca,
+	loja: one Loja
 }
 
-abstract sig Pagina {}
-
-sig Biblioteca extends Pagina {
+sig Biblioteca {
 	jogos: set Jogo,
 	aplicativos: set Aplicativo
 }
 
-one sig Loja extends Pagina {
+one sig Loja {
 	jogos: set Jogo,
 	aplicativos: set Aplicativo
 }
@@ -22,7 +22,7 @@ one sig Loja extends Pagina {
 sig Jogo {}
 sig Aplicativo {}
 
-one sig Social extends Pagina {
+one sig Social {
 	publicacoes: set Publicacao
 }
 
@@ -36,9 +36,17 @@ sig Video extends Publicacao {}
 sig Stream extends Publicacao{}
 
 -- Predicados
-pred temBiblioteca[x:Xbox]{}
-pred temLoja[x:Xbox] {}
-pred temSocial[x:Xbox] {}
+pred temBiblioteca[u:Usuario]{
+	one u.biblioteca
+}
+
+pred temLoja[u:Usuario] {
+	one u.loja
+}
+
+pred temSocial[u:Usuario] {
+	one u.social
+}
 
 pred temXbox[u:Usuario] {
 	one u.~usuario
@@ -55,7 +63,7 @@ fact {
 	all b:Biblioteca | #armazenamentoJogos[b] <= 5
 	all b:Biblioteca | #armazenamentoApps[b] <= 8
 	all l:Loja | #promoJogos[l] + #promoApps[l] >= 10 and #promoJogos[l] + #promoApps[l] <= 20
-	all x:Xbox | temLoja[x] and temSocial[x]
+	all u:Usuario | temLoja[u] and temSocial[u]
 	all p:Publicacao | foiPublicado[p]
 }
 
