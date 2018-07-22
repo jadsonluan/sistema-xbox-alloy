@@ -36,25 +36,12 @@ sig Video extends Publicacao {}
 sig Stream extends Publicacao{}
 
 -- Predicados
-pred temBiblioteca[u:Usuario]{
-	one u.biblioteca
-}
-
-pred temLoja[u:Usuario] {
-	one u.loja
-}
-
-pred temSocial[u:Usuario] {
-	one u.social
-}
-
-pred temXbox[u:Usuario] {
-	one u.~usuario
-}
-
-pred foiPublicado[p:Publicacao] {
-	one p.~publicacoes
-}
+pred temBiblioteca[u:Usuario]{ one u.biblioteca }
+pred temLoja[u:Usuario] { one u.loja }
+pred temSocial[u:Usuario] { one u.social }
+pred temXbox[u:Usuario] { one u.~usuario }
+pred temUsuario[b:Biblioteca] { one b.~biblioteca }
+pred foiPublicado[p:Publicacao] {	one p.~publicacoes }
 
 -- fatos
 fact {
@@ -62,6 +49,7 @@ fact {
 	all p:Publicacao | foiPublicado[p]
 	all l:Loja | #promoJogos[l] + #promoApps[l] >= 10 and #promoJogos[l] + #promoApps[l] <= 20
 	all u:Usuario | temLoja[u] and temSocial[u] and temBiblioteca[u]
+	all b:Biblioteca | temUsuario[b]
 }
 
 --funções
