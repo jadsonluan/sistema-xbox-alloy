@@ -60,8 +60,6 @@ pred foiPublicado[p:Publicacao] {
 fact {
 	all u:Usuario | temXbox[u]
 	all p:Publicacao | foiPublicado[p]
-	all b:Biblioteca | #armazenamentoJogos[b] <= 5
-	all b:Biblioteca | #armazenamentoApps[b] <= 8
 	all l:Loja | #promoJogos[l] + #promoApps[l] >= 10 and #promoJogos[l] + #promoApps[l] <= 20
 	all u:Usuario | temLoja[u] and temSocial[u] and temBiblioteca[u]
 }
