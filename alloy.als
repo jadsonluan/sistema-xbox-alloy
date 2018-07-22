@@ -1,5 +1,4 @@
 module xbox
-
 -------------------------------------------------------
 -------------------- A S S I N A T U R A S  |
 -------------------------------------------------------
@@ -10,7 +9,9 @@ sig Xbox {
 sig Usuario {
 	social: set Social,
 	biblioteca: set Biblioteca,
-	loja: set Loja
+	loja: set Loja,
+	podeComprarJogo: set Jogo,
+	podeComprarApp: set Aplicativo
 }
 
 sig Biblioteca {
@@ -31,7 +32,7 @@ one sig Social {
 }
 
 abstract sig Publicacao {
-	autor: one Usuario
+	autoria: one Usuario
 }
 
 -- Tipos de publicação
@@ -57,6 +58,8 @@ pred temBiblioteca[u:Usuario]{ one u.biblioteca }
 pred temLoja[u:Usuario] { one u.loja }
 pred temSocial[u:Usuario] { one u.social }
 pred temXbox[u:Usuario] { one u.~usuario }
+pred jogosNaoAdquiridos[u:Usuario] {u.loja.jogos - u.biblioteca.jogos }
+pred appsNaoAdquiridos[u:Usuario] {u.loja.aplicativos - u.biblioteca.aplicativos }
 
 pred temUsuario[b:Biblioteca] { one b.~biblioteca }
 
@@ -75,6 +78,8 @@ pred temStream[c:Comentario] { one c.transmissao }
 -------------------- F A T O S |
 -------------------------------------
 fact {
+	all u:Usuario | u.podeComprarJogo = jogosNaoAdquiridos[u]
+	all u:Usuario | u.podeComprarApp = appsNaoAdquiridos[u]
 	all u:Usuario | temXbox[u]
 	all u:Usuario | temLoja[u] and temSocial[u] and temBiblioteca[u]
 	
@@ -92,13 +97,12 @@ fact {
 }
 
 --------------------------------------------
--------------------- F U N Ç Õ E S |
+-------------------- F U N Ç Õ E S 
 --------------------------------------------
 fun armazenamentoJogos[b:Biblioteca]: set Jogo { b.jogos }
 fun armazenamentoApps[b:Biblioteca]: set Aplicativo { b.aplicativos }
 fun promoJogos[l:Loja]: set Jogo {	l.jogos }
 fun promoApps[l:Loja]: set Aplicativo {	l.aplicativos }
-
 
 ----------------------------------------
 -------------------- T E S T E S |
