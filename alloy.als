@@ -4,9 +4,9 @@ sig Xbox {
 }
 
 sig Usuario {
-	social: one Social,
-	biblioteca: one Biblioteca,
-	loja: one Loja
+	social: set Social,
+	biblioteca: set Biblioteca,
+	loja: set Loja
 }
 
 sig Biblioteca {
@@ -64,7 +64,6 @@ fact {
 	all b:Biblioteca | #armazenamentoApps[b] <= 8
 	all l:Loja | #promoJogos[l] + #promoApps[l] >= 10 and #promoJogos[l] + #promoApps[l] <= 20
 	all u:Usuario | temLoja[u] and temSocial[u]
-	all p:Publicacao | foiPublicado[p]
 }
 
 --funções
