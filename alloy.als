@@ -58,8 +58,6 @@ pred temBiblioteca[u:Usuario]{ one u.biblioteca }
 pred temLoja[u:Usuario] { one u.loja }
 pred temSocial[u:Usuario] { one u.social }
 pred temXbox[u:Usuario] { one u.~usuario }
-pred jogosNaoAdquiridos[u:Usuario] {u.loja.jogos - u.biblioteca.jogos }
-pred appsNaoAdquiridos[u:Usuario] {u.loja.aplicativos - u.biblioteca.aplicativos }
 
 pred temUsuario[b:Biblioteca] { one b.~biblioteca }
 
@@ -101,8 +99,10 @@ fact {
 --------------------------------------------
 fun armazenamentoJogos[b:Biblioteca]: set Jogo { b.jogos }
 fun armazenamentoApps[b:Biblioteca]: set Aplicativo { b.aplicativos }
-fun promoJogos[l:Loja]: set Jogo {	l.jogos }
-fun promoApps[l:Loja]: set Aplicativo {	l.aplicativos }
+fun promoJogos[l:Loja]: set Jogo {l.jogos }
+fun promoApps[l:Loja]: set Aplicativo {l.aplicativos }
+fun jogosNaoAdquiridos[u:Usuario]: set Jogo {u.loja.jogos - u.biblioteca.jogos }
+fun appsNaoAdquiridos[u:Usuario]: set Aplicativo {u.loja.aplicativos - u.biblioteca.aplicativos }
 
 ----------------------------------------
 -------------------- T E S T E S |
